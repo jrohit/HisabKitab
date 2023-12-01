@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "hisabkitab",
-    "slug": "hisabkitab",
+    "slug": "hisab-kitab",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,10 +21,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.rohitjainlnct.hisabkitab"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "08c0d0cf-4da0-4cdc-b3a2-3afbc5cf9329"
+      }
+    },
+    "owner": "rohitjainlnct"
   }
 }
