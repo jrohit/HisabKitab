@@ -3,7 +3,9 @@ import Background from "../components/Background";
 import Logo from "../components/Logo";
 import Header from "../components/Header";
 import Button from "../components/Button";
+import { theme } from "../core/theme";
 import Paragraph from "../components/Paragraph";
+import { Text, TouchableOpacity, View } from "react-native";
 
 export default function StartScreen({ navigation }) {
   return (
@@ -17,6 +19,25 @@ export default function StartScreen({ navigation }) {
       >
         Login
       </Button>
+
+      <View
+        style={{
+          flexDirection: "row",
+          marginTop: 4,
+        }}
+      >
+        <Text>Don’t have an account? </Text>
+        <TouchableOpacity onPress={() => navigation.replace("RegisterScreen")}>
+          <Text
+            style={{
+              fontWeight: "bold",
+              color: theme.colors.primary,
+            }}
+          >
+            Sign up
+          </Text>
+        </TouchableOpacity>
+      </View>
     </Background>
   );
 }

@@ -10,7 +10,7 @@ import {
   Button,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Chip, TextInput } from "react-native-paper";
+import { ActivityIndicator, Chip, TextInput } from "react-native-paper";
 import { MaterialIcons } from "@expo/vector-icons";
 import axios from "axios";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -39,14 +39,15 @@ const Milk = () => {
       year: "numeric",
     }).format(Date.now())
   );
-  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
 
-  const [currentRate] = useState(68);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [currentRate] = useState(58);
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalAmountForMonth, setTotalAmountForMonth] = useState(0);
   const [formData, setFormData] = useState({
-    morningQuantity: "",
-    eveningQuantity: "",
+    morningQuantity: "0",
+    eveningQuantity: "0",
     total: 0,
   });
   const navigation = useNavigation();
@@ -56,13 +57,10 @@ const Milk = () => {
       parseFloat(formData.eveningQuantity || 0);
     setFormData({ ...formData, total });
     setTotalAmount(total * currentRate);
-    if (total > 0) {
-      setIsSubmitDisabled(false);
-    }
   }, [formData.eveningQuantity, formData.morningQuantity]);
 
   const handleChangeDate = (dateCounter) => {
-    setIsSubmitDisabled(true);
+    setIsLoading(true);
     const date = new Date(year, month - 1, day);
     date.setDate(date.getDate() + dateCounter);
     const updatedDate = new Intl.DateTimeFormat("en-GB")
@@ -114,10 +112,11 @@ const Milk = () => {
 
         const fData = {
           total: data.total || 0,
-          morningQuantity: "" + (data.morningQuantity || ""),
-          eveningQuantity: "" + (data.eveningQuantity || ""),
+          morningQuantity: "" + (data.morningQuantity || "0"),
+          eveningQuantity: "" + (data.eveningQuantity || "0"),
         };
         setFormData(fData);
+        setIsLoading(false);
       } catch (error) {
         console.log("error occurred while fetching milk data ", error);
       }
@@ -150,6 +149,7 @@ const Milk = () => {
         }
       )
       .then((response) => {
+        setIsLoading(false);
         Alert.alert("Entry Saved", "Data Saved Successfully!");
         navigation.reset({
           index: 0,
@@ -157,7 +157,8 @@ const Milk = () => {
         });
       })
       .catch((error, res) => {
-        console.log("error ", error, res);
+        Alert.alert("Error", "Data Not Saved Successfully!");
+        console.log("error ", { ...error }, res);
       });
   };
 
@@ -339,60 +340,74 @@ const Milk = () => {
             <MaterialIcons name="skip-next" size={24} color="black" />
           </Text>
         </View>
-        <View
-          style={{
-            margin: 20,
-          }}
-        >
-          <Text style={styles.label}>Morning</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Morning Quantity"
-            value={formData.morningQuantity}
-            onChangeText={(text) => handleInputChange("morningQuantity", text)}
-            keyboardType="numeric"
-          />
-
-          <Text style={styles.label}>Evening</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Evening Quantity"
-            value={formData.eveningQuantity}
-            onChangeText={(text) => handleInputChange("eveningQuantity", text)}
-            keyboardType="numeric"
-          />
-
-          <View
-            style={{
-              flexDirection: "row",
-              marginHorizontal: 20,
-            }}
-          >
-            <Text style={styles.label}>Total</Text>
-            <Text
+        {isLoading ? (
+          <>
+            <View
               style={{
-                paddingVertical: 3,
-                marginHorizontal: 10,
-                fontWeight: "bold",
+                marginVertical: 10,
               }}
             >
-              {formData.total} L || {totalAmount}
-            </Text>
-            <MaterialCommunityIcons
+              <ActivityIndicator />
+            </View>
+          </>
+        ) : (
+          <>
+            <View
               style={{
-                paddingVertical: 3,
+                margin: 20,
               }}
-              name="currency-inr"
-              size={24}
-              color="black"
-            />
-          </View>
-          <Button
-            disabled={isSubmitDisabled}
-            title="Submit"
-            onPress={handleSubmit}
-          />
-        </View>
+            >
+              <Text style={styles.label}>Morning</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Morning Quantity"
+                value={formData.morningQuantity}
+                onChangeText={(text) =>
+                  handleInputChange("morningQuantity", text)
+                }
+                keyboardType="numeric"
+              />
+
+              <Text style={styles.label}>Evening</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Evening Quantity"
+                value={formData.eveningQuantity}
+                onChangeText={(text) =>
+                  handleInputChange("eveningQuantity", text)
+                }
+                keyboardType="numeric"
+              />
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginHorizontal: 20,
+                }}
+              >
+                <Text style={styles.label}>Total</Text>
+                <Text
+                  style={{
+                    paddingVertical: 3,
+                    marginHorizontal: 10,
+                    fontWeight: "bold",
+                  }}
+                >
+                  {formData.total} L || {totalAmount}
+                </Text>
+                <MaterialCommunityIcons
+                  style={{
+                    paddingVertical: 3,
+                  }}
+                  name="currency-inr"
+                  size={24}
+                  color="black"
+                />
+              </View>
+              <Button title="Submit" onPress={handleSubmit} />
+            </View>
+          </>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

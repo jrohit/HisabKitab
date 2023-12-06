@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity, StyleSheet, View } from "react-native";
-import { Text } from "react-native-paper";
+import { ActivityIndicator, Text } from "react-native-paper";
 import Background from "../components/Background";
 import Logo from "../components/Logo";
 import Header from "../components/Header";
@@ -14,14 +14,17 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
 export default function LoginScreen({}) {
-  const [email, setEmail] = useState({ value: "four@gmail.com", error: "" });
-  const [password, setPassword] = useState({ value: "12345", error: "" });
+  const [email, setEmail] = useState({ value: "", error: "" });
+  const [password, setPassword] = useState({ value: "", error: "" });
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onLoginPressed = () => {
+    setIsLoading(true);
     const emailError = emailValidator(email.value);
     const passwordError = passwordValidator(password.value);
     if (emailError || passwordError) {
+      setIsLoading(false);
       setEmail({ ...email, error: emailError });
       setPassword({ ...password, error: passwordError });
       return;
@@ -33,6 +36,7 @@ export default function LoginScreen({}) {
         password: password.value,
       })
       .then((response) => {
+        setIsLoading(false);
         AsyncStorage.setItem("userToken", response.data.token);
         navigation.reset({
           index: 0,
@@ -40,6 +44,7 @@ export default function LoginScreen({}) {
         });
       })
       .catch((error, res) => {
+        setIsLoading(false);
         console.log("error ", error, res);
       });
   };
@@ -49,43 +54,50 @@ export default function LoginScreen({}) {
       <BackButton goBack={navigation.goBack} />
       <Logo />
       <Header>Welcome</Header>
-      <TextInput
-        label="Email"
-        returnKeyType="next"
-        value={email.value}
-        onChangeText={(text) => setEmail({ value: text, error: "" })}
-        error={!!email.error}
-        errorText={email.error}
-        autoCapitalize="none"
-        autoCompleteType="email"
-        textContentType="emailAddress"
-        keyboardType="email-address"
-      />
-      <TextInput
-        label="Password"
-        returnKeyType="done"
-        value={password.value}
-        onChangeText={(text) => setPassword({ value: text, error: "" })}
-        error={!!password.error}
-        errorText={password.error}
-        secureTextEntry
-      />
-      {/* <View style={styles.forgotPassword}>
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
+        <>
+          <TextInput
+            label="Email"
+            returnKeyType="next"
+            value={email.value}
+            onChangeText={(text) => setEmail({ value: text, error: "" })}
+            error={!!email.error}
+            errorText={email.error}
+            autoCapitalize="none"
+            autoCompleteType="email"
+            textContentType="emailAddress"
+            keyboardType="email-address"
+          />
+          <TextInput
+            label="Password"
+            returnKeyType="done"
+            value={password.value}
+            onChangeText={(text) => setPassword({ value: text, error: "" })}
+            error={!!password.error}
+            errorText={password.error}
+            secureTextEntry
+          />
+          {/* <View style={styles.forgotPassword}>
         <TouchableOpacity
           onPress={() => navigation.navigate("ResetPasswordScreen")}
         >
           <Text style={styles.forgot}>Forgot your password?</Text>
         </TouchableOpacity>
       </View> */}
-      <Button mode="contained" onPress={onLoginPressed}>
-        Login
-      </Button>
-      {/* <View style={styles.row}>
-        <Text>Don’t have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.replace("RegisterScreen")}>
-          <Text style={styles.link}>Sign up</Text>
-        </TouchableOpacity>
-      </View> */}
+          <Button mode="contained" onPress={onLoginPressed}>
+            Login
+          </Button>
+          <View style={styles.forgotPassword}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("RegisterScreen")}
+            >
+              <Text style={styles.forgot}>Sign Up</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
     </Background>
   );
 }

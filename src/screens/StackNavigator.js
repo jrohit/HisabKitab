@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import BottomTabs from "./BottomTabs";
+import RegisterScreen from "./RegisterScreen";
 
 const StackNavigator = () => {
   const Stack = createStackNavigator();
@@ -51,6 +52,11 @@ const StackNavigator = () => {
         <Stack.Screen
           name="LoginScreen"
           component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="RegisterScreen"
+          component={RegisterScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
