@@ -45,6 +45,8 @@ const Milk = () => {
   const [currentRate] = useState(58);
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalAmountForMonth, setTotalAmountForMonth] = useState(0);
+  const [totalLitresForMonth, setTotalLitresForMonth] = useState(0);
+
   const [formData, setFormData] = useState({
     morningQuantity: "0",
     eveningQuantity: "0",
@@ -79,6 +81,7 @@ const Milk = () => {
   useEffect(() => {
     const fetchMilkDataForMonth = async () => {
       setTotalAmountForMonth(0);
+      setTotalLitresForMonth(0);
       const token = await AsyncStorage.getItem("userToken");
       try {
         const { data } = await axios.get(
@@ -90,6 +93,7 @@ const Milk = () => {
           }
         );
         setTotalAmountForMonth(data?.totalAmount || 0);
+        setTotalLitresForMonth(data?.totalLitres || 0);
       } catch (error) {
         console.log("error occurred while fetching milk data ", error);
       }
@@ -151,10 +155,10 @@ const Milk = () => {
       .then((response) => {
         setIsLoading(false);
         Alert.alert("Entry Saved", "Data Saved Successfully!");
-        navigation.reset({
-          index: 0,
-          routes: [{ name: "Milk" }],
-        });
+        // navigation.reset({
+        //   index: 0,
+        //   routes: [{ name: "Milk" }],
+        // });
       })
       .catch((error, res) => {
         Alert.alert("Error", "Data Not Saved Successfully!");
@@ -280,7 +284,7 @@ const Milk = () => {
               fontSize: 15,
             }}
           >
-            Total for {monthName}
+            Total Amount in {monthName}
           </Text>
           <Text
             style={{
@@ -293,6 +297,34 @@ const Milk = () => {
             </Chip>
           </Text>
           <MaterialCommunityIcons name="currency-inr" size={24} color="black" />
+        </View>
+        <View
+          style={{
+            backgroundColor: "#AFEEEE",
+            padding: 10,
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <Text
+            style={{
+              marginLeft: 20,
+              fontSize: 15,
+            }}
+          >
+            Total Litres in {monthName}
+          </Text>
+          <Text
+            style={{
+              marginLeft: 20,
+              fontSize: 22,
+            }}
+          >
+            <Chip mode="outlined" onPress={() => console.log("Pressed")}>
+              {totalLitresForMonth}
+            </Chip>
+          </Text>
+          <MaterialCommunityIcons name="tea-outline" size={30} color="black" />
         </View>
         <View
           style={{
