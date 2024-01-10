@@ -9,7 +9,7 @@ import {
   View,
   Button,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Chip, TextInput } from "react-native-paper";
 import { MaterialIcons } from "@expo/vector-icons";
 import axios from "axios";
@@ -78,28 +78,29 @@ const Milk = () => {
     );
   };
 
-  useEffect(() => {
-    const fetchMilkDataForMonth = async () => {
-      setTotalAmountForMonth(0);
-      setTotalLitresForMonth(0);
-      const token = await AsyncStorage.getItem("userToken");
-      try {
-        const { data } = await axios.get(
-          `https://hisabkitabapi.onrender.com/getMilkDataForMonth?month=${month}&year=${year}`,
-          {
-            headers: {
-              Authorization: "Bearer " + token,
-            },
-          }
-        );
-        setTotalAmountForMonth(data?.totalAmount || 0);
-        setTotalLitresForMonth(data?.totalLitres || 0);
-      } catch (error) {
-        console.log("error occurred while fetching milk data ", error);
-      }
-    };
-    fetchMilkDataForMonth();
+  const fetchMilkDataForMonth = useCallback(async () => {
+    setTotalAmountForMonth(0);
+    setTotalLitresForMonth(0);
+    const token = await AsyncStorage.getItem("userToken");
+    try {
+      const { data } = await axios.get(
+        `https://hisabkitabapi.onrender.com/getMilkDataForMonth?month=${month}&year=${year}`,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      setTotalAmountForMonth(data?.totalAmount || 0);
+      setTotalLitresForMonth(data?.totalLitres || 0);
+    } catch (error) {
+      console.log("error occurred while fetching milk data ", error);
+    }
   }, [monthName]);
+
+  useEffect(() => {
+    fetchMilkDataForMonth();
+  }, [fetchMilkDataForMonth]);
 
   useEffect(() => {
     const fetchMilkData = async () => {
@@ -153,12 +154,9 @@ const Milk = () => {
         }
       )
       .then((response) => {
+        fetchMilkDataForMonth();
         setIsLoading(false);
         Alert.alert("Entry Saved", "Data Saved Successfully!");
-        // navigation.reset({
-        //   index: 0,
-        //   routes: [{ name: "Milk" }],
-        // });
       })
       .catch((error, res) => {
         Alert.alert("Error", "Data Not Saved Successfully!");
