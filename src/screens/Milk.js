@@ -16,6 +16,7 @@ import axios from "axios";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import ParentScreen from "./ParentScreen";
 // import { REACT_APP_API_URL } from "@env";
 
 const Milk = () => {
@@ -165,13 +166,7 @@ const Milk = () => {
   };
 
   return (
-    <SafeAreaView
-      style={{
-        paddingTop: Platform.OS === "android" ? 70 : 0,
-        flex: 1,
-        backgroundColor: "white",
-      }}
-    >
+    <ParentScreen>
       <ScrollView>
         <View
           style={{
@@ -439,7 +434,7 @@ const Milk = () => {
           </>
         )}
       </ScrollView>
-    </SafeAreaView>
+    </ParentScreen>
   );
 };
 

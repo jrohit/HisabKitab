@@ -5,6 +5,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import {
   Alert,
   Button,
+  Platform,
   Pressable,
   SafeAreaView,
   ScrollView,
@@ -16,6 +17,7 @@ import axios from "axios";
 import { CalendarList } from "react-native-calendars";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { cloneDeep, has } from "lodash";
+import ParentScreen from "./ParentScreen";
 
 const Water = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -183,13 +185,7 @@ const Water = () => {
   };
 
   return (
-    <SafeAreaView
-      style={{
-        paddingTop: Platform.OS === "android" ? 70 : 0,
-        flex: 1,
-        backgroundColor: "white",
-      }}
-    >
+    <ParentScreen>
       <ScrollView>
         <View
           style={{
@@ -413,7 +409,7 @@ const Water = () => {
           </>
         )}
       </ScrollView>
-    </SafeAreaView>
+    </ParentScreen>
   );
 };
 

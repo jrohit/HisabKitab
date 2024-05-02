@@ -8,35 +8,12 @@ import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import Water from "./Water";
 import LogoutScreen from "./LogoutScreen";
+import Transactions from "./TransactionScreen";
 
 const BottomTabs = () => {
   const Tab = createBottomTabNavigator();
   return (
     <Tab.Navigator>
-      {/* <Tab.Screen
-        name="Dashboard"
-        component={Dashboard}
-        options={{
-          tabBarLabel: "Dashboard",
-          headerShown: false,
-          tabBarLabelStyle: { color: "#008E97" },
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <MaterialCommunityIcons
-                name="view-dashboard"
-                size={24}
-                color="black"
-              />
-            ) : (
-              <MaterialCommunityIcons
-                name="view-dashboard-outline"
-                size={24}
-                color="black"
-              />
-            ),
-        }}
-      /> */}
-
       <Tab.Screen
         name="Milk"
         component={Milk}
@@ -70,9 +47,25 @@ const BottomTabs = () => {
           tabBarLabel: "Water",
           tabBarIcon: ({ focused }) =>
             focused ? (
-              <Ionicons name="ios-water-sharp" size={24} color="black" />
+              <Ionicons name="water" size={24} color="black" />
             ) : (
-              <Ionicons name="ios-water-outline" size={24} color="black" />
+              <Ionicons name="water-outline" size={24} color="black" />
+            ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Stats"
+        component={Transactions}
+        options={{
+          tabBarLabel: "Monthly View",
+          headerShown: false,
+          tabBarLabelStyle: { color: "#008E97" },
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <Ionicons name="pie-chart" size={24} color="black" />
+            ) : (
+              <Ionicons name="pie-chart-outline" size={24} color="black" />
             ),
         }}
       />

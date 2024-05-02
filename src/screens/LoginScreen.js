@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity, StyleSheet, View } from "react-native";
-import { ActivityIndicator, Text } from "react-native-paper";
+import {
+  ActivityIndicator,
+  Text,
+  TextInput as PaperTextInput,
+} from "react-native-paper";
 import Background from "../components/Background";
 import Logo from "../components/Logo";
 import Header from "../components/Header";
@@ -18,6 +22,12 @@ export default function LoginScreen({}) {
   const [password, setPassword] = useState({ value: "", error: "" });
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
+
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
+
+  const togglePasswordVisibility = () => {
+    setSecureTextEntry(!secureTextEntry);
+  };
 
   const onLoginPressed = () => {
     setIsLoading(true);
@@ -77,15 +87,14 @@ export default function LoginScreen({}) {
             onChangeText={(text) => setPassword({ value: text, error: "" })}
             error={!!password.error}
             errorText={password.error}
-            secureTextEntry
+            secureTextEntry={secureTextEntry}
+            right={
+              <PaperTextInput.Icon
+                icon={secureTextEntry ? "eye-off" : "eye"}
+                onPress={togglePasswordVisibility}
+              />
+            }
           />
-          {/* <View style={styles.forgotPassword}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("ResetPasswordScreen")}
-        >
-          <Text style={styles.forgot}>Forgot your password?</Text>
-        </TouchableOpacity>
-      </View> */}
           <Button mode="contained" onPress={onLoginPressed}>
             Login
           </Button>
