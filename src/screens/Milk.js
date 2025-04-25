@@ -1,21 +1,19 @@
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Alert,
-  Platform,
+  Button,
   Pressable,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   View,
-  Button,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Chip, TextInput } from "react-native-paper";
-import { MaterialIcons } from "@expo/vector-icons";
-import axios from "axios";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from "@react-navigation/native";
+import { API_URL } from "../../config";
 import ParentScreen from "./ParentScreen";
 // import { REACT_APP_API_URL } from "@env";
 
@@ -85,7 +83,7 @@ const Milk = () => {
     const token = await AsyncStorage.getItem("userToken");
     try {
       const { data } = await axios.get(
-        `https://hisabkitabapi.onrender.com/getMilkDataForMonth?month=${month}&year=${year}`,
+        `${API_URL}/getMilkDataForMonth?month=${month}&year=${year}`,
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -108,7 +106,7 @@ const Milk = () => {
       const token = await AsyncStorage.getItem("userToken");
       try {
         const { data } = await axios.get(
-          `https://hisabkitabapi.onrender.com/getMilkDataForDay?day=${day}&month=${month}&year=${year}`,
+          `${API_URL}/getMilkDataForDay?day=${day}&month=${month}&year=${year}`,
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -145,15 +143,11 @@ const Milk = () => {
       totalAmount,
     };
     axios
-      .post(
-        "https://hisabkitabapi.onrender.com/addUpdateMilkQuantity",
-        payload,
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
-      )
+      .post(`${API_URL}/addUpdateMilkQuantity`, payload, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
       .then((response) => {
         fetchMilkDataForMonth();
         setIsLoading(false);

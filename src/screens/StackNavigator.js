@@ -1,13 +1,14 @@
-import { Alert, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import StartScreen from "./StartScreen";
-import LoginScreen from "./LoginScreen";
-import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import axios from "axios";
+import React, { useEffect } from "react";
+import { Alert, StyleSheet } from "react-native";
+import { API_URL } from "../../config";
 import BottomTabs from "./BottomTabs";
+import LoginScreen from "./LoginScreen";
 import RegisterScreen from "./RegisterScreen";
+import StartScreen from "./StartScreen";
 
 const StackNavigator = () => {
   const Stack = createStackNavigator();
@@ -17,7 +18,7 @@ const StackNavigator = () => {
       try {
         const token = await AsyncStorage.getItem("userToken");
         if (token) {
-          await axios.post("https://hisabkitabapi.onrender.com/validateToken", {
+          await axios.post(`${API_URL}/validateToken`, {
             token,
           });
         }

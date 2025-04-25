@@ -1,22 +1,20 @@
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { cloneDeep, has } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { ActivityIndicator, Chip } from "react-native-paper";
-import { MaterialIcons } from "@expo/vector-icons";
 import {
   Alert,
   Button,
-  Platform,
   Pressable,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
-import axios from "axios";
 import { CalendarList } from "react-native-calendars";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { cloneDeep, has } from "lodash";
+import { ActivityIndicator, Chip } from "react-native-paper";
+import { API_URL } from "../../config";
 import ParentScreen from "./ParentScreen";
 
 const Water = () => {
@@ -87,7 +85,7 @@ const Water = () => {
     const token = await AsyncStorage.getItem("userToken");
     try {
       const { data } = await axios.get(
-        `https://hisabkitabapi.onrender.com/getWaterDataForMonth?month=${month}&year=${year}`,
+        `${API_URL}/getWaterDataForMonth?month=${month}&year=${year}`,
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -137,7 +135,7 @@ const Water = () => {
     try {
       setIsLoading(true);
       const { data } = await axios.get(
-        `https://hisabkitabapi.onrender.com/getWaterDataForDay?day=${day}&month=${month}&year=${year}`,
+        `${API_URL}/getWaterDataForDay?day=${day}&month=${month}&year=${year}`,
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -157,7 +155,7 @@ const Water = () => {
       setIsLoading(true);
       axios
         .post(
-          "https://hisabkitabapi.onrender.com/updateWaterForDate",
+          "${API_URL}/updateWaterForDate",
           {
             day,
             month,

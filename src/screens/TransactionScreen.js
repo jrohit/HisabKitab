@@ -1,11 +1,12 @@
+import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Alert, Pressable, ScrollView, View } from "react-native";
-import { ActivityIndicator, Chip, Modal, Text } from "react-native-paper";
+import { ActivityIndicator, Chip, Text } from "react-native-paper";
+import { API_URL } from "../../config";
 import ParentScreen from "./ParentScreen";
-import { MaterialIcons } from "@expo/vector-icons";
 import TransactionTableView from "./TransactionTableView";
 
 const Transactions = () => {
@@ -29,7 +30,7 @@ const Transactions = () => {
     const token = await AsyncStorage.getItem("userToken");
     axios
       .get(
-        `https://hisabkitabapi.onrender.com/fetchMilkTransactionsForMonth?month=${month}&year=${year}`,
+        `${API_URL}/fetchMilkTransactionsForMonth?month=${month}&year=${year}`,
         {
           headers: {
             Authorization: "Bearer " + token,

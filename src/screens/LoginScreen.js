@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { TouchableOpacity, StyleSheet, View } from "react-native";
-import {
-  ActivityIndicator,
-  Text,
-  TextInput as PaperTextInput,
-} from "react-native-paper";
-import Background from "../components/Background";
-import Logo from "../components/Logo";
-import Header from "../components/Header";
-import Button from "../components/Button";
-import TextInput from "../components/TextInput";
-import BackButton from "../components/BackButton";
-import { theme } from "../core/theme";
-import { emailValidator, passwordValidator } from "../helpers/validators";
-import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import React, { useState } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  TextInput as PaperTextInput,
+  Text,
+} from "react-native-paper";
+import { API_URL } from "../../config";
+import BackButton from "../components/BackButton";
+import Background from "../components/Background";
+import Button from "../components/Button";
+import Header from "../components/Header";
+import Logo from "../components/Logo";
+import TextInput from "../components/TextInput";
+import { theme } from "../core/theme";
+import { emailValidator, passwordValidator } from "../helpers/validators";
 
 export default function LoginScreen({}) {
   const [email, setEmail] = useState({ value: "", error: "" });
@@ -41,7 +42,7 @@ export default function LoginScreen({}) {
     }
 
     axios
-      .post("https://hisabkitabapi.onrender.com/login", {
+      .post(`${API_URL}/login`, {
         email: email.value,
         password: password.value,
       })
