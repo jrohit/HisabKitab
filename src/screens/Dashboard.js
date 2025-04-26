@@ -1,10 +1,10 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
 import Background from "../components/Background";
-import Logo from "../components/Logo";
-import Header from "../components/Header";
-import Paragraph from "../components/Paragraph";
 import Button from "../components/Button";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import Header from "../components/Header";
+import Logo from "../components/Logo";
+import Paragraph from "../components/Paragraph";
 
 export default function Dashboard({ navigation }) {
   return (
@@ -15,13 +15,11 @@ export default function Dashboard({ navigation }) {
       <Button
         mode="outlined"
         onPress={() => {
-          console.log(AsyncStorage.getItem("userToken"));
           AsyncStorage.removeItem("userToken");
           navigation.reset({
             index: 0,
             routes: [{ name: "StartScreen" }],
           });
-          console.log(AsyncStorage.getItem("userToken"));
         }}
       >
         Logout

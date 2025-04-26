@@ -12,7 +12,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { CalendarList } from "react-native-calendars";
+import { Calendar } from "react-native-calendars";
 import { ActivityIndicator, Chip } from "react-native-paper";
 import { API_URL } from "../../config";
 import ParentScreen from "./ParentScreen";
@@ -228,35 +228,37 @@ const Water = () => {
             alignItems: "center",
           }}
         >
-          <CalendarList
-            horizontal
-            pagingEnabled={true}
-            contentContainerStyle={{
-              display: "flex",
-              justifyContent: "center",
-              flexDirection: "row",
-              alignItems: "center",
-              width: 200,
-            }}
-            maxDate={new Date().toDateString()}
-            futureScrollRange={0}
-            pastScrollRange={12}
-            onDayPress={dayPressHandler}
-            calendarWidth={411}
-            onVisibleMonthsChange={(months) => {
-              setMonthName(
-                new Intl.DateTimeFormat("en-US", {
-                  month: "long",
-                }).format(new Date(months[0].dateString))
-              );
-              setMonth(months[0].month);
-              setYear(months[0].year);
-              setDay(months[0].day);
-            }}
-            markingType="custom"
-            markedDates={markedDates}
-            showsHorizontalScrollIndicator={true}
-          />
+          <ScrollView scrollEnabled={false}>
+            <Calendar
+              horizontal
+              pagingEnabled={true}
+              contentContainerStyle={{
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "row",
+                alignItems: "center",
+                width: 200,
+              }}
+              maxDate={new Date().toDateString()}
+              futureScrollRange={0}
+              pastScrollRange={12}
+              onDayPress={dayPressHandler}
+              calendarWidth={411}
+              onVisibleMonthsChange={(months) => {
+                setMonthName(
+                  new Intl.DateTimeFormat("en-US", {
+                    month: "long",
+                  }).format(new Date(months[0].dateString))
+                );
+                setMonth(months[0].month);
+                setYear(months[0].year);
+                setDay(months[0].day);
+              }}
+              markingType="custom"
+              markedDates={markedDates}
+              showsHorizontalScrollIndicator={true}
+            />
+          </ScrollView>
         </View>
 
         {isLoading ? (
